@@ -11,4 +11,8 @@ yarn.lock
 # Local development files
 CODE_REVIEW.md
 PLANNING.md
+POSTMAN_REVIEW.md
+
+# Postman collection (reference only, not needed in repo)
+M2 Collection.postman_collection.json
 

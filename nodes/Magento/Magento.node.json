@@ -1,0 +1,19 @@
+{
+	"node": "n8n-nodes-magento-rest",
+	"nodeVersion": "1.1.2",
+	"codexVersion": "1.0",
+	"categories": ["Sales", "E-Commerce"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://devdocs.magento.com/guides/v2.4/get-started/authentication/gs-authentication-token.html"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://devdocs.magento.com/guides/v2.4/rest/bk-rest.html"
+			}
+		]
+	}
+}
+
