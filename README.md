@@ -41,6 +41,7 @@ npm install n8n-nodes-magento-rest
 ### Enhanced Features
 
 - **searchCriteria Support**: Build complex queries with filters, sort orders, and pagination
+- **Simplify Output**: Flatten Magento responses for easier use - converts `custom_attributes` array to object, flattens `extension_attributes`, and simplifies nested structures
 - **Better Error Handling**: Detailed error messages with Magento-specific error codes
 - **Performance Optimized**: Built-in pagination and rate limiting awareness
 
@@ -85,6 +86,18 @@ npm install n8n-nodes-magento-rest
 ### Inventory
 - **Update Stock** - Update product stock levels
 - **Get Stock** - Get stock information for products
+
+## Simplify Output
+
+The node includes an optional "Simplify Output" feature that flattens Magento API responses to make them easier to work with. When enabled:
+
+- **custom_attributes** array is converted to an `attributes` object keyed by attribute codes
+- **extension_attributes** are moved to top level with `extension_` prefix
+- **product_links** (products only) are grouped by `link_type`
+- **media_gallery_entries** (products only) are simplified to an `images` array
+- **SKU** values are sanitized (quotes removed)
+
+This makes it easier to access product attributes like `{{$json.attributes.name}}` instead of searching through arrays.
 
 ## Credentials
 

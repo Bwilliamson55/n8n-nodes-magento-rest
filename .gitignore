@@ -16,3 +16,6 @@ POSTMAN_REVIEW.md
 # Postman collection (reference only, not needed in repo)
 M2 Collection.postman_collection.json
 
+# Temporary development files
+temp.js
+

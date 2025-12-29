@@ -313,6 +313,18 @@ export async function loadWebsiteCodes(this: ILoadOptionsFunctions): Promise<Arr
 }
 
 /**
+ * Common "Simplify Output" option field
+ * When enabled, flattens Magento responses for easier use
+ */
+export const simplifyOutputField: INodeProperties = {
+	displayName: 'Simplify Output',
+	name: 'simplifyOutput',
+	type: 'boolean',
+	default: false,
+	description: 'When enabled, flattens the response structure. Converts custom_attributes array to an object, flattens extension_attributes, and simplifies nested structures.',
+};
+
+/**
  * Common website code field for Magento multi-store support
  * Actually uses store view codes (not website codes) for the URL path
  * Dynamically loads store view codes from Magento API, but allows custom values
@@ -338,6 +350,152 @@ export const websiteCodeField: INodeProperties = {
 		},
 	],
 };
+
+/**
+ * Helper function to sanitize SKU by removing surrounding quotes
+ */
+function sanitizeSku(sku: any): any {
+	if (typeof sku === 'string') {
+		return sku.replace(/^"+|"+$/g, '');
+	}
+	return sku;
+}
+
+/**
+ * Helper function to flatten custom_attributes array into an object
+ * Converts [{attribute_code: "name", value: "Product Name"}, ...] 
+ * to {name: "Product Name", ...}
+ */
+function flattenCustomAttributes(attributesArray: any[]): Record<string, any> {
+	if (!Array.isArray(attributesArray)) {
+		return {};
+	}
+
+	const attributes: Record<string, any> = {};
+	attributesArray.forEach((attr) => {
+		const code = attr.attribute_code?.replace(/^"+|"+$/g, '');
+		if (code) {
+			attributes[code] = attr.value;
+		}
+	});
+	return attributes;
+}
+
+/**
+ * Helper function to flatten extension_attributes to top level with prefix
+ */
+function flattenExtensionAttributes(data: any): any {
+	if (!data.extension_attributes || typeof data.extension_attributes !== 'object') {
+		return data;
+	}
+
+	const flattened = { ...data };
+	Object.keys(data.extension_attributes).forEach((key) => {
+		flattened[`extension_${key}`] = data.extension_attributes[key];
+	});
+	delete flattened.extension_attributes;
+	return flattened;
+}
+
+/**
+ * Helper function to flatten product_links by grouping by link_type
+ */
+function flattenProductLinks(productLinks: any[]): Record<string, string[]> {
+	if (!Array.isArray(productLinks)) {
+		return {};
+	}
+
+	return productLinks.reduce(
+		(acc, link) => {
+			if (!acc[link.link_type]) {
+				acc[link.link_type] = [];
+			}
+			acc[link.link_type].push(link.linked_product_sku);
+			return acc;
+		},
+		{} as Record<string, string[]>
+	);
+}
+
+/**
+ * Helper function to simplify media_gallery_entries to images array
+ */
+function simplifyMediaGallery(mediaGalleryEntries: any[]): any[] {
+	if (!Array.isArray(mediaGalleryEntries)) {
+		return [];
+	}
+
+	return mediaGalleryEntries.map((entry, index) => ({
+		url: entry.file,
+		roles: entry.types || [],
+		position: entry.position || index + 1,
+		id: entry.id,
+		disabled: entry.disabled || false,
+	}));
+}
+
+/**
+ * Helper function to flatten/simplify Magento API responses
+ * Makes the response structure more user-friendly by:
+ * - Flattening custom_attributes array to object
+ * - Flattening extension_attributes to top level
+ * - Simplifying product_links structure
+ * - Simplifying media_gallery_entries
+ * - Sanitizing SKU values
+ */
+export function flattenResponse(data: any, resource: string): any {
+	if (!data || typeof data !== 'object') {
+		return data;
+	}
+
+	// Handle arrays (list responses)
+	if (Array.isArray(data)) {
+		return data.map((item) => flattenResponse(item, resource));
+	}
+
+	// Handle list responses wrapped in items
+	if (data.items && Array.isArray(data.items)) {
+		return {
+			...data,
+			items: data.items.map((item: any) => flattenResponse(item, resource)),
+		};
+	}
+
+	// Clone the object to avoid mutating the original
+	const flattened = { ...data };
+
+	// Sanitize SKU if present
+	if (flattened.sku !== undefined) {
+		flattened.sku = sanitizeSku(flattened.sku);
+	}
+
+	// Flatten custom_attributes (common across resources)
+	if (Array.isArray(flattened.custom_attributes)) {
+		flattened.attributes = flattenCustomAttributes(flattened.custom_attributes);
+		delete flattened.custom_attributes;
+	}
+
+	// Flatten extension_attributes
+	const withExtensionFlattened = flattenExtensionAttributes(flattened);
+	// Merge the flattened extension attributes back into the main object
+	Object.assign(flattened, withExtensionFlattened);
+
+	// Product-specific transformations
+	if (resource === 'product') {
+		// Flatten product_links
+		if (Array.isArray(flattened.product_links)) {
+			flattened.product_links = flattenProductLinks(flattened.product_links);
+		}
+
+		// Simplify media_gallery_entries
+		if (Array.isArray(flattened.media_gallery_entries)) {
+			flattened.images = simplifyMediaGallery(flattened.media_gallery_entries);
+			delete flattened.media_gallery_entries;
+		}
+	}
+
+	return flattened;
+}
 
 /**
  * Common searchCriteria fields that can be reused across resources

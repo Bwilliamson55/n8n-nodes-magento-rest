@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { commonSearchCriteriaFields, createJsonBodyPreSend, createSearchCriteriaPreSend, websiteCodeField } from './helpers';
+import { commonSearchCriteriaFields, createJsonBodyPreSend, createSearchCriteriaPreSend, websiteCodeField, simplifyOutputField } from './helpers';
 
 export const categoryOperations: INodeProperties[] = [
 	{
@@ -127,6 +127,14 @@ export const categoryFields: INodeProperties[] = [
 	},
 	{
 		...websiteCodeField,
+		displayOptions: {
+			show: {
+				resource: ['category'],
+			},
+		},
+	},
+	{
+		...simplifyOutputField,
 		displayOptions: {
 			show: {
 				resource: ['category'],

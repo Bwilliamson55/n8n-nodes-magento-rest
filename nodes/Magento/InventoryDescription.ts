@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { parseJsonParameter } from './helpers';
+import { parseJsonParameter, simplifyOutputField } from './helpers';
 
 export const inventoryOperations: INodeProperties[] = [
 	{
@@ -99,6 +99,14 @@ export const inventoryFields: INodeProperties[] = [
 						return requestOptions;
 					}
 				],
+			},
+		},
+	},
+	{
+		...simplifyOutputField,
+		displayOptions: {
+			show: {
+				resource: ['inventory'],
 			},
 		},
 	},

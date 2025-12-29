@@ -1,4 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
+import { simplifyOutputField } from './helpers';
 
 export const storeOperations: INodeProperties[] = [
 	{
@@ -57,6 +58,13 @@ export const storeOperations: INodeProperties[] = [
 ];
 
 export const storeFields: INodeProperties[] = [
-	// No additional fields needed for store operations
+	{
+		...simplifyOutputField,
+		displayOptions: {
+			show: {
+				resource: ['store'],
+			},
+		},
+	},
 ];
 

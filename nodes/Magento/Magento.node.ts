@@ -13,7 +13,7 @@ import { customerOperations, customerFields } from './CustomerDescription';
 import { orderOperations, orderFields } from './OrderDescription';
 import { inventoryOperations, inventoryFields } from './InventoryDescription';
 import { storeOperations, storeFields } from './StoreDescription';
-import { formatMagentoError, loadWebsiteCodes } from './helpers';
+import { formatMagentoError, loadWebsiteCodes, flattenResponse } from './helpers';
 
 export class Magento implements INodeType {
 	description: INodeTypeDescription = {
@@ -314,9 +314,20 @@ export class Magento implements INodeType {
 				// Make the HTTP request
 				const response = await this.helpers.httpRequest(requestOptions);
 
-				// Return the response exactly as the API returns it
+				// Check if simplify output is enabled
+				let processedResponse = response;
+				try {
+					const simplifyOutput = this.getNodeParameter('simplifyOutput', i, false) as boolean;
+					if (simplifyOutput) {
+						processedResponse = flattenResponse(response, resource);
+					}
+				} catch (e) {
+					// Parameter might not exist for some operations, ignore
+				}
+
+				// Return the response (flattened if simplify output is enabled)
 				returnData.push({
-					json: response,
+					json: processedResponse,
 					pairedItem: { item: i },
 				});
 			} catch (error: any) {
