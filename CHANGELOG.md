@@ -10,20 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of n8n-nodes-magento-rest
 - Core Magento REST API operations for Products, Categories, Customers, Orders, and Inventory
-- Comprehensive searchCriteria support with filter groups, filters, sort orders, and pagination
+- searchCriteria support with filter groups, filters, sort orders, and pagination
 - Store resource with operations to get store groups, store views, and websites
 - Dynamic store view code loading from Magento API
 - Enhanced error handling with formatted Magento error messages
 - Website/store view code support for multi-store Magento instances
-- Field selection support (prepared for future implementation)
 
 ### Features
-- **Products**: Create, Get, Update, Delete, List operations
-- **Categories**: Create, Get, Update, Delete, List operations
-- **Customers**: Create, Get, Update, Delete, List operations
-- **Orders**: Get, List, Create Invoice, Create Shipment, Cancel operations
-- **Inventory**: Update Stock, Get Stock operations
-- **Store**: Get Store Groups, Get Store Views, Get Websites operations
+- Products: Create, Get, Update, Delete, List operations
+- Categories: Create, Get, Update, Delete, List operations
+- Customers: Create, Get, Update, Delete, List operations
+- Orders: Get, List, Create Invoice, Create Shipment, Cancel operations
+- Inventory: Update Stock, Get Stock operations
+- Store: Get Store Groups, Get Store Views, Get Websites operations
 
 ### Technical Details
 - Built with TypeScript

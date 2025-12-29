@@ -1,6 +1,6 @@
 # n8n-nodes-magento-rest
 
-An enhanced n8n community node for interacting with the Magento REST API. This node extends the core Magento node functionality with advanced features like comprehensive searchCriteria support, making it easier to build complex queries without using the HTTP node.
+An n8n community node for interacting with the Magento REST API. Extends the core Magento node with searchCriteria support and other enhancements, making it easier to build complex queries without using the HTTP node.
 
 ## About Magento
 
@@ -12,13 +12,7 @@ An enhanced n8n community node for interacting with the Magento REST API. This n
 
 ## Why This Node?
 
-While n8n includes a core Magento node, it lacks support for advanced features like:
-- **searchCriteria parameters**: Complex filtering, sorting, and pagination
-- **Bulk operations**: Efficient batch processing
-- **Custom endpoints**: Support for custom REST endpoints
-- **Enhanced error handling**: Better error messages and retry logic
-
-This node provides all the functionality of the core node **plus** these enhanced features, eliminating the need to use the HTTP node for common Magento operations.
+The core n8n Magento node lacks support for searchCriteria parameters, which are essential for complex filtering, sorting, and pagination. This node adds that functionality along with better error handling, making it easier to work with Magento's REST API without resorting to the HTTP node.
 
 ## Table of Contents
 
@@ -44,15 +38,13 @@ npm install n8n-nodes-magento-rest
 
 ## Features
 
-### ✨ Enhanced Features
+### Enhanced Features
 
-- **🔍 searchCriteria Support**: Build complex queries with filters, sort orders, and pagination
-- **📦 Bulk Operations**: Efficient batch processing for products, customers, and orders
-- **🔄 Better Error Handling**: Detailed error messages with Magento-specific error codes
-- **⚡ Performance Optimized**: Built-in pagination and rate limiting awareness
-- **🎯 Field Selection**: Specify exactly which fields to return in responses
+- **searchCriteria Support**: Build complex queries with filters, sort orders, and pagination
+- **Better Error Handling**: Detailed error messages with Magento-specific error codes
+- **Performance Optimized**: Built-in pagination and rate limiting awareness
 
-### ✅ Core Features (Matching Core Node)
+### Core Features
 
 - **Products**: Full CRUD operations
 - **Categories**: Full CRUD operations
@@ -67,25 +59,25 @@ npm install n8n-nodes-magento-rest
 - **Get Product** - Retrieve a single product by SKU
 - **Update Product** - Update an existing product
 - **Delete Product** - Delete a product
-- **List Products** - Get products with searchCriteria support ✨
+- **List Products** - Get products with searchCriteria support
 
 ### Categories
 - **Create Category** - Add a new category
 - **Get Category** - Retrieve a single category
 - **Update Category** - Update an existing category
 - **Delete Category** - Delete a category
-- **List Categories** - Get categories with searchCriteria support ✨
+- **List Categories** - Get categories with searchCriteria support
 
 ### Customers
 - **Create Customer** - Add a new customer
 - **Get Customer** - Retrieve a single customer
 - **Update Customer** - Update an existing customer
 - **Delete Customer** - Delete a customer
-- **List Customers** - Get customers with searchCriteria support ✨
+- **List Customers** - Get customers with searchCriteria support
 
 ### Orders
 - **Get Order** - Retrieve a single order
-- **List Orders** - Get orders with searchCriteria support ✨
+- **List Orders** - Get orders with searchCriteria support
 - **Create Invoice** - Create an invoice for an order
 - **Create Shipment** - Create a shipment for an order
 - **Cancel Order** - Cancel an order
@@ -96,16 +88,16 @@ npm install n8n-nodes-magento-rest
 
 ## Credentials
 
-This node uses n8n's built-in **Magento 2** credential type. You can reuse existing Magento credentials from the core n8n Magento node - no need to create new credentials!
+This node uses n8n's built-in Magento 2 credential type. You can reuse existing Magento credentials from the core n8n Magento node.
 
 ### Setting Up Credentials
 
-1. In n8n, go to **Credentials** and create a new **Magento 2** credential (or reuse an existing one)
+1. In n8n, go to Credentials and create a new Magento 2 credential (or reuse an existing one)
 2. **Host**: Enter your Magento instance URL (e.g., `https://your-magento-store.com`)
 3. **Access Token**: Provide your Magento REST API access token
 
 To obtain an access token:
-- In Magento Admin Panel, go to **System > Extensions > Integrations**
+- In Magento Admin Panel, go to System > Extensions > Integrations
 - Create a new integration and activate it
 - Copy the access token and use it in n8n
 
@@ -118,7 +110,7 @@ See [n8n Magento 2 Credentials Documentation](https://docs.n8n.io/integrations/b
 
 ## searchCriteria Usage
 
-The searchCriteria feature allows you to build complex queries using a user-friendly interface instead of manually constructing query strings.
+The searchCriteria feature lets you build complex queries using a user-friendly interface instead of manually constructing query strings.
 
 ### Example: Find Products by Name
 
@@ -135,7 +127,7 @@ The searchCriteria feature allows you to build complex queries using a user-frie
 - Page Size: `20`
 - Current Page: `1`
 
-This will find all products with "shirt" in the name, sorted alphabetically, returning 20 results per page.
+This finds all products with "shirt" in the name, sorted alphabetically, returning 20 results per page.
 
 ### Example: Multiple Filters with AND/OR Logic
 
@@ -147,7 +139,7 @@ This will find all products with "shirt" in the name, sorted alphabetically, ret
 - Field: `price`, Condition: `lt`, Value: `50`
 - Field: `special_price`, Condition: `notnull`
 
-This will find products that are enabled AND visible in catalog/search, AND (price < 50 OR has special price).
+This finds products that are enabled AND visible in catalog/search, AND (price < 50 OR has special price).
 
 ## Examples
 
@@ -216,29 +208,34 @@ This will find products that are enabled AND visible in catalog/search, AND (pri
 
 ## Updating
 
-If you depend solely on the community nodes part of the GUI, you can update there.
+If you use the community nodes GUI, you can update there. For Docker setups, rebuild your container to get the updated node version.
 
-If you use a dockerfile setup such as one of mine: [SimpleDockerfileExample](https://github.com/Bwilliamson55/n8n-custom-images/blob/master/bwill-nodes-simple/Dockerfile), you can rebuild your container to get the updated node version.
+### Docker Setup
 
----
-
-### *If you're using `docker compose` or `docker-compose`, you can still use a dockerfile to persist custom nodes:*
+If you're using `docker compose` or `docker-compose`, you can use a Dockerfile to persist custom nodes:
 
 Put the `Dockerfile` and `docker-entrypoint.sh` in the same directory as your docker-compose file, and swap the `image` property for `build: .`
 
-Then run `docker-compose down && docker-compose up --build -d`.
+Then run:
+```bash
+docker-compose down && docker-compose up --build -d
+```
 
-Or if you want to have less down time, run `docker-compose build` to create the image, THEN do `docker-compose down && docker-compose up --force-recreate -d` - [Source Docs](https://docs.docker.com/compose/compose-file/build/#dockerfile)
+Or for less downtime:
+```bash
+docker-compose build
+docker-compose down && docker-compose up --force-recreate -d
+```
 
-If you're on Digital Ocean or similar, "Force rebuild and redeploy".
+**Note**: Using `-g` in the Dockerfile means these nodes won't show in 'community nodes' but will work and show when searched for.
 
 `Dockerfile`:
-    ***Note the `-g` - these nodes will not show in 'community nodes' but will work and show when searched for***
 ```dockerfile
 FROM n8nio/n8n:latest
 RUN npm install -g n8n-nodes-magento-rest
 ```
-`docker-entrypoint.sh`: (Default one from n8n repo)
+
+`docker-entrypoint.sh`:
 ```shell
 #!/bin/sh
 
@@ -251,17 +248,40 @@ fi
 chown -R node /home/node
 
 if [ "$#" -gt 0 ]; then
-  # Got started with arguments
   exec su-exec node "$@"
 else
-  # Got started without arguments
   exec su-exec node n8n
 fi
 ```
 
+## Publishing
+
+To publish a new version to npm:
+
+1. **Update version** in `package.json`
+2. **Build the project**:
+   ```bash
+   npm run build
+   ```
+3. **Run linting**:
+   ```bash
+   npm run lint
+   ```
+4. **Test locally** with a real n8n instance
+5. **Dry run** to check what will be published:
+   ```bash
+   npm pack --dry-run
+   ```
+6. **Publish**:
+   ```bash
+   npm publish
+   ```
+
+Only the `dist/` directory will be published to npm based on the `files` array in `package.json`.
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome. Please submit a Pull Request. For major changes, open an issue first to discuss.
 
 ### Development Setup
 
@@ -302,36 +322,31 @@ To develop and test the node locally with your n8n instance:
 
 3. **Link to your n8n installation**:
    
-   **For n8n installed globally:**
+   For n8n installed globally:
    ```bash
    cd /path/to/your/n8n/installation
    npm link n8n-nodes-magento-rest
    ```
    
-   **For n8n installed locally in a project:**
+   For n8n installed locally:
    ```bash
    cd /path/to/your/n8n/project
    npm link n8n-nodes-magento-rest
    ```
    
-   **For n8n in Docker:**
-   - Mount your local development directory into the container
-   - Or build a custom Docker image with the linked package
+   For n8n in Docker: mount your local development directory into the container or build a custom Docker image.
 
 4. **Restart n8n** to load the linked node
 
-5. **During development**, you can use watch mode to automatically rebuild:
+5. **During development**, use watch mode to automatically rebuild:
    ```bash
    npm run dev
    ```
-   This will watch for changes and rebuild automatically.
 
-6. **To unlink** when you're done:
+6. **To unlink** when done:
    ```bash
    npm unlink -g n8n-nodes-magento-rest
-   ```
-   And in your n8n directory:
-   ```bash
+   cd /path/to/your/n8n/directory
    npm unlink n8n-nodes-magento-rest
    ```
 
@@ -346,10 +361,7 @@ To develop and test the node locally with your n8n instance:
 
 ### Testing
 
-- Test all operations with a real Magento instance
-- Verify searchCriteria functionality with various filter combinations
-- Test error handling with invalid credentials or API errors
-- Ensure backward compatibility with existing workflows
+Test all operations with a real Magento instance, verify searchCriteria functionality with various filter combinations, and test error handling with invalid credentials or API errors.
 
 ### Reporting Issues
 
