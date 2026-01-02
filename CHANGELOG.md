@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-01-XX
+
+### Added
+- **Simplify Output** feature: Optional output flattening for easier data manipulation
+  - Converts `custom_attributes` array to `attributes` object (keyed by attribute codes)
+  - Flattens `extension_attributes` to top level with `extension_` prefix
+  - Simplifies `product_links` structure (grouped by link_type for products)
+  - Converts `media_gallery_entries` to simplified `images` array (for products)
+  - Sanitizes SKU values (removes quotes)
+- Simplify Output option available for all resources (Products, Categories, Customers, Orders, Inventory, Store)
+
+### Changed
+- Improved response structure handling for better workflow integration
+
 ## [0.1.0] - 2025-01-XX
 
 ### Added

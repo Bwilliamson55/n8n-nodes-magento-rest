@@ -382,10 +382,18 @@ If you encounter any issues or have feature requests, please open an issue on th
 
 ## Version History
 
+### v0.2.0 (Current)
+- **Simplify Output** feature: Optional response flattening for easier workflow integration
+  - Converts custom_attributes array to attributes object
+  - Flattens extension_attributes to top level
+  - Simplifies product_links and media_gallery_entries
+  - Sanitizes SKU values
+
 ### v0.1.0 (Initial Release)
 - Core Magento REST API operations
 - searchCriteria support for list operations
 - Enhanced error handling
+- Dynamic store view code loading
 - Comprehensive documentation
 
 ## Resources
